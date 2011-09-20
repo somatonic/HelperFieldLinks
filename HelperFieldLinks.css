@@ -1,0 +1,22 @@
+
+.ui-widget-content{
+	overflow:hidden; /*clear floats*/
+}
+.fieldEditLink,.templateEditLink{
+	float:right;
+}
+.fieldEditLink a,.templateEditLink a{
+	float:left;
+	line-height:1em;
+}
+.fieldEditLink span,.templateEditLink span{
+	-moz-opacity:0.5;
+	-webkit-opacity:0.5;
+	-o-opacity:0.5;
+	filter: alpha(opacity = 50); 
+	opacity:0.5;
+	float:right;
+	position:relative;
+	height:1.3em;
+	top:-3px;
+}

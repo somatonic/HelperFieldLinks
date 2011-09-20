@@ -1,0 +1,81 @@
+<?php
+/**
+ * ProcessWire2.* Module
+ *
+ * Shows field and template edit links on page edit
+ *
+ * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
+ * @created	2011/09/02
+ *
+ *------------------------------------------------
+ * ProcessWire 2.x 
+ * Copyright (C) 2011 by Ryan Cramer 
+ * Licensed under GNU/GPL v2, see LICENSE.TXT
+ * 
+ * http://www.processwire.com
+ * http://www.ryancramer.com
+ *
+ */
+
+class HelperFieldLinks extends Wiredata implements Module {
+	
+	public static function getModuleInfo() {
+		return array(
+			'title' => 'Developer helper - field & template shortcuts', 
+			'version' => 100, 
+			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
+			'singular' => true, 
+			'autoload' => true, 
+		);
+	}
+	
+	public function init() {
+		
+		// only when editing a page and role superuser
+		if(strpos($_SERVER['REQUEST_URI'], $this->config->urls->admin . 'page/edit/?id=') && $this->user->hasRole('superuser')){
+			
+			// add stylesheets
+			$this->config->styles->add($this->config->urls->HelperFieldLinks . "HelperFieldLinks.css");
+		
+			// add a hook after each inputfield is rendered and modify the output
+			$this->addHookAfter('Inputfield::render', $this, 'addShortcutLinks'); 
+		}
+	}
+
+	/**
+	 * hook method to add edit links
+	 *
+	 */
+	public function addShortcutLinks(HookEvent $event) {
+			
+			// to prevent multiple render cycles from adding link multiple times as on page reference fields and possibly others
+			if(strpos($event->return, 'fieldEditLink')) return;
+			
+			$inputfield	= $event->object; // returns the event object in this case the inputfield
+			$fname		= $inputfield->name;
+			
+			if($this->fields->get($fname)){
+				$id = $this->fields->get($fname)->id;
+				$event->return .= 
+<<<OUT
+		<span class='fieldEditLink'>
+			<a href='{$this->config->urls->admin}setup/field/edit?id={$id}' title='edit field settings'>{$fname}</a><span class='ui-icon ui-icon-gear'/>
+		</span>
+OUT;
+			}
+			// if we reached the template field
+			if($fname == 'template'){
+				$id 	= $inputfield->value; // id of selected template
+				$tname 	= $this->templates->get($id)->name;
+				$replace = '<p><select id="template"';
+				$with =
+<<<OUT
+		<span class='templateEditLink'>
+			<a href='{$this->config->urls->admin}setup/template/edit?id={$id}' title='edit template settings'>{$tname}<span class='ui-icon ui-icon-gear'/></a>
+		</span>
+		{$replace}
+OUT;
+				$event->return = str_replace($replace,$with, $event->return);	
+			}	
+	}
+}
