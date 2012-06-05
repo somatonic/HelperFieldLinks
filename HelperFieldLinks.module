@@ -6,6 +6,7 @@
  *
  * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
  * @created	2011/09/02
+ * last_modified 2012/06/06
  *
  *------------------------------------------------
  * ProcessWire 2.x 
@@ -22,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts', 
-			'version' => 100, 
+			'version' => 101, 
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'singular' => true, 
 			'autoload' => true, 
@@ -51,7 +52,8 @@ class HelperFieldLinks extends Wiredata implements Module {
 			// to prevent multiple render cycles from adding link multiple times as on page reference fields and possibly others
 			if(strpos($event->return, 'fieldEditLink')) return;
 			
-			$inputfield	= $event->object; // returns the event object in this case the inputfield
+			// returns the event object in this case the inputfield
+			$inputfield	= $event->object; 
 			$fname		= $inputfield->name;
 			
 			if($this->fields->get($fname)){
@@ -59,7 +61,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 				$event->return .= 
 <<<OUT
 		<span class='fieldEditLink'>
-			<a href='{$this->config->urls->admin}setup/field/edit?id={$id}' title='edit field settings'>{$fname}</a><span class='ui-icon ui-icon-gear'/>
+			<a href='{$this->config->urls->admin}setup/field/edit?id={$id}' title='edit field settings'>{$fname}</a><span class='ui-icon ui-icon-gear'></span>
 		</span>
 OUT;
 			}
