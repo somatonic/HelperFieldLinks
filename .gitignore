@@ -2,7 +2,7 @@
 
 # ignore all .htaccess
 .htaccess
-
+.gitignore
 test*.php
 test_*
 ___*.php
