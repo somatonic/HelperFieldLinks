@@ -6,7 +6,7 @@
  *
  * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
  * @created	2011/09/02
- * last_modified 2012/06/06
+ * last_modified 2012/08/18
  *
  *------------------------------------------------
  * ProcessWire 2.x
@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 101,
+			'version' => 102,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -34,7 +34,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public function init() {
 
 		// only when editing a page and role superuser
-		if(strpos($_SERVER['REQUEST_URI'], $this->config->urls->admin . 'page/edit/?id=') && $this->user->hasRole('superuser')){
+		if(strpos($_SERVER['REQUEST_URI'], $this->config->urls->admin . 'page/edit/?id=') !== false && $this->user->hasRole('superuser')){
 
 			// add stylesheets
 			$this->config->styles->add($this->config->urls->HelperFieldLinks . "HelperFieldLinks.css");
