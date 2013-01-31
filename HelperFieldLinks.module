@@ -6,7 +6,7 @@
  *
  * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
  * @created	2011/09/02
- * last_modified 2012/08/18
+ * last_modified 2013/01/31
  *
  *------------------------------------------------
  * ProcessWire 2.x
@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 102,
+			'version' => 103,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -57,28 +57,34 @@ class HelperFieldLinks extends Wiredata implements Module {
 			$inputfield	= $event->object;
 			$fname		= $inputfield->name;
 
-			if($this->fields->get($fname)){
+			if($this->fields->get($fname)) {
 				$id = $this->fields->get($fname)->id;
-				$event->return .=
+			}
+			if(strpos($fname,"_repeater") !== FALSE) {
+				$real_fname = preg_replace("/(_repeater[0-9]*)/","",$fname);
+				if($this->fields->get($real_fname)){
+					$id = $this->fields->get($real_fname)->id;
+				}
+				$fname = $real_fname;
+			}
+			if(isset($id)) return $event->return .=
 <<<OUT
 		<span class='fieldEditLink'>
 			<a href='{$this->config->urls->admin}setup/field/edit?id={$id}' title='edit field settings'>{$fname}</a><span class='ui-icon ui-icon-gear'></span>
 		</span>
 OUT;
-			}
+
 			// if we reached the template field
 			if($fname == 'template'){
 				$id 	= $inputfield->value; // id of selected template
 				$tname 	= $this->templates->get($id)->name;
-				$replace = '<p><select id="template"';
 				$with =
 <<<OUT
 		<span class='templateEditLink'>
 			<a href='{$this->config->urls->admin}setup/template/edit?id={$id}' title='edit template settings'>{$tname}<span class='ui-icon ui-icon-gear'/></a>
 		</span>
-		{$replace}
 OUT;
-				$event->return = str_replace($replace,$with, $event->return);
+				$event->return .= $with;
 			}
 	}
 }
