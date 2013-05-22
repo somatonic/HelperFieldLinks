@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 103,
+			'version' => 104,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -81,7 +81,7 @@ OUT;
 				$with =
 <<<OUT
 		<span class='templateEditLink'>
-			<a href='{$this->config->urls->admin}setup/template/edit?id={$id}' title='edit template settings'>{$tname}<span class='ui-icon ui-icon-gear'/></a>
+			<a href='{$this->config->urls->admin}setup/template/edit?id={$id}' title='edit template settings'>{$tname}<span class='ui-icon ui-icon-gear'></span></a>
 		</span>
 OUT;
 				$event->return .= $with;
