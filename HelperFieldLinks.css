@@ -1,6 +1,8 @@
 
 .Inputfields li > .ui-widget-content{
-	overflow:hidden; /*clear floats*/
+	content: "";
+	display: table;
+	clear: both;
 }
 
 .fieldEditLink,.templateEditLink{
