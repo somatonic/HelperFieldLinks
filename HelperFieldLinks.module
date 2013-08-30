@@ -33,7 +33,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 
 	public function init() {
 
-		// only when editing a page and role superuser
+		// only when editing a page or user and role superuser
 		if((strpos($_SERVER['REQUEST_URI'], $this->config->urls->admin . 'page/edit/?id=') !== false || strpos($_SERVER['REQUEST_URI'], $this->config->urls->admin . 'access/users/edit/?id=') !== false) && $this->user->hasRole('superuser')){
 
 			// add stylesheets
