@@ -1,6 +1,6 @@
-# HelperFieldLinks 1.0.3
+# HelperFieldLinks 1.0.5
 
-A custom module for ProcessWire2 to show inline shortcut links to fields and template when editing a page. Only visible to superusers.
+A custom module for ProcessWire2 to show inline shortcut links to fields and template when editing a page. Only visible to superusers. Additionally if you click on the little gear icon a layer will be shown with the settings for the field.
 
 ## How to install:
 
