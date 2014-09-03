@@ -93,6 +93,9 @@ class HelperFieldLinks extends Wiredata implements Module {
 										$data_value = rtrim($txtf_data,"|");
 									}
 								}
+								if( is_array($data_value) ){
+									$data_value = implode("|",$data_value);
+								}
 								$settings_str .= "<span>$data_key:</span> $data_value<br/>";
 							}
 						} else {
