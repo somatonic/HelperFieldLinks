@@ -152,7 +152,9 @@ OUT;
 										$data_value = '-';
 									}
 								}
-								$settings_str .= "<span>$data_key:</span> $data_value<br/>";
+								$settings_str .= "<span>$data_key:</span> ";
+								$settings_str .= is_array($data_value) ? implode(" ", $data_value) : $data_value;
+								$settings_str .= "<br/>";
 							}
 
 						} else {
