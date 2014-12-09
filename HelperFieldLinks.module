@@ -6,7 +6,7 @@
  *
  * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
  * @created	2011/09/02
- * last_modified 2013/11/23
+ * last_modified 2014/12/09
  *
  *------------------------------------------------
  * ProcessWire 2.x
@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 106,
+			'version' => 107,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -80,20 +80,21 @@ class HelperFieldLinks extends Wiredata implements Module {
 									$parent = $this->pages->get((int)$data_value);
 									$data_value = "$data_value (<a href='{$this->config->urls->admin}page/edit/?id=$parent->id'>$parent->path</a>)";
 								}
-								if($data_key == "template_id") {
+								else if($data_key == "template_id") {
 									$tpl = $this->templates->get((int)$data_value);
 									$data_value = "$data_value (<a href='{$this->config->urls->admin}setup/template/edit/?id=$tpl->id'>$tpl->name</a>)";
 								}
-								if($data_key == "textformatters") {
+								else if($data_key == "textformatters") {
 									if(!empty($data_value)) {
-										$txtf_data = '';
-										foreach($data_value as $subkey => $subvalue){
-											$txtf_data .= $subvalue . "|";
-										}
-										$data_value = rtrim($txtf_data,"|");
+										$data_value = implode("|",$data_value);
 									}
 								}
+								else if(is_array($data_value)){
+									$data_value = implode("|",$data_value);
+								}
+
 								$settings_str .= "<span>$data_key:</span> $data_value<br/>";
+
 							}
 						} else {
 							$settings_str .= "<span>$key:</span> " . $value . "<br/>";
