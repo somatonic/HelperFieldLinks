@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 107,
+			'version' => 108,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -76,13 +76,22 @@ class HelperFieldLinks extends Wiredata implements Module {
 					foreach ($settings as $key => $value) {
 						if($key == 'data'){
 							foreach($value as $data_key => $data_value) {
-								if($data_key == "parent_id") {
+								if($data_key == "parent_id" && $data_value) {
 									$parent = $this->pages->get((int)$data_value);
 									$data_value = "$data_value (<a href='{$this->config->urls->admin}page/edit/?id=$parent->id'>$parent->path</a>)";
 								}
 								else if($data_key == "template_id") {
-									$tpl = $this->templates->get((int)$data_value);
-									$data_value = "$data_value (<a href='{$this->config->urls->admin}setup/template/edit/?id=$tpl->id'>$tpl->name</a>)";
+									if(is_array($data_value) && !empty($data_value)){
+										$tpl_links = '';
+										foreach($data_value as $val){
+											$tpl = $this->templates->get((int)$val);
+											if($tpl->id) $tpl_links .= "<a href='{$this->config->urls->admin}setup/template/edit/?id=$tpl->id'>$tpl->name</a> ";
+										}
+										$data_value = $tpl_links;
+									} else if(is_int($data_value)){
+										$tpl = $this->templates->get((int)$data_value);
+										if($tpl->id) $data_value = "<a href='{$this->config->urls->admin}setup/template/edit/?id=$tpl->id'>$tpl->name</a>";
+									}
 								}
 								else if($data_key == "textformatters") {
 									if(!empty($data_value)) {
@@ -132,16 +141,16 @@ OUT;
 								if($data_key == "childTemplates" || $data_key == "parentTemplates") {
 									if(is_array($data_value) && !empty($data_value)) {
 										$tpl_data = '';
-										foreach($data_value as $sub_key => $sub_value) {
-											$family_tpl = $this->templates->get((int)$sub_value);
-											$tpl_data .= $family_tpl->name . "|";
+										foreach($data_value as $val){
+											$tpl = $this->templates->get((int)$val);
+											if($tpl->id) $tpl_data .= "<a href='{$this->config->urls->admin}setup/template/edit/?id=$tpl->id'>$tpl->name</a> ";
 										}
-										$data_value = rtrim($tpl_data,"|");
+										$data_value = $tpl_data;
 									} else {
 										$data_value = '-';
 									}
 								}
-								if($data_key == "cacheExpirePages") {
+								else if($data_key == "cacheExpirePages") {
 									if(is_array($data_value) && !empty($data_value)) {
 										$page_data = '';
 										foreach($data_value as $sub_key => $sub_value) {
@@ -152,6 +161,9 @@ OUT;
 									} else {
 										$data_value = '-';
 									}
+								}
+								else if(is_array($data_value)){
+									$data_value = implode("|",$data_value);
 								}
 								$settings_str .= "<span>$data_key:</span> $data_value<br/>";
 							}
