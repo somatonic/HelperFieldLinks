@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 108,
+			'version' => 109,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
