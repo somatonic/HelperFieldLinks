@@ -6,7 +6,7 @@
  *
  * @author	Philipp 'Soma' Urlich philipp(a)urlich.ch
  * @created	2011/09/02
- * last_modified 2014/12/09
+ * last_modified 2019/02/28
  *
  *------------------------------------------------
  * ProcessWire 2.x
@@ -23,7 +23,7 @@ class HelperFieldLinks extends Wiredata implements Module {
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Developer helper - field & template shortcuts',
-			'version' => 108,
+			'version' => 109,
 			'summary' => 'Adds shortcut edit link to all input fields on page edit. Adds shortcut edit link for the selected template. Only visible for superusers.',
 			'href' => 'http://processwire.com/talk/topic/421-helperfieldlinks-field-and-template-edit-shortcuts/',
 			'singular' => true,
@@ -163,7 +163,15 @@ OUT;
 									}
 								}
 								else if(is_array($data_value)){
-									$data_value = implode("|",$data_value);
+									$v = "";
+									foreach($data_value as $k => $arr) {
+										if(is_array($arr)) {
+											$v .= $k . " => (" . implode("|", $arr) . ") ";
+										} else {
+											$v .= $arr;
+										}
+									}
+									$data_value = $v;
 								}
 								$settings_str .= "<span>$data_key:</span> $data_value<br/>";
 							}
