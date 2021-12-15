@@ -2,6 +2,7 @@
     "name": "uiii/helperfieldlinks",
     "type": "pw-module",
     "keywords": ["processwire", "module"],
+    "license": "MIT",
     "require": {
         "hari/pw-module": "^1.0"
     }
