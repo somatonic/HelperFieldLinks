@@ -1,0 +1,8 @@
+{
+    "name": "uiii/helperfieldlinks",
+    "type": "pw-module",
+    "keywords": ["processwire", "module"],
+    "require": {
+        "hari/pw-module": "^1.0"
+    }
+}
